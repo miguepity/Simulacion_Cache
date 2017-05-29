@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <stdlib.h>
 
 using namespace std;
 /*  Bytes en la Cache
@@ -9,7 +10,7 @@ using namespace std;
       2->Etiqueta
       3->Datos        */
 double tiempo;
-unsigned char cache[9][3];
+unsigned char cache[64][8];
 unsigned char ram[4096];
 unsigned char leer(int,int);
 void Ordenar(int);
@@ -19,10 +20,10 @@ int n, k, m, etiqueta, puntero;
 int main(int argc, char *argv[]){
   //Inicializacion de variables
   puntero=0;
-  tiempo=0;
-  n = 1000;
+  tiempo=0.00;
+  n = 5;
   k = 8;
-  m = 16;
+  m = 64;
   fstream input;
   input.open("Datos.txt", ios::in);
   string str;
@@ -229,16 +230,16 @@ void escribir(int i, int tipo, int valor){
 }
 
 void Ordenar(int tipo){
-  //Se inicializa/limpia el cache
-  for (int i = 0; i < 128; ++i){
-    for (int j = 0; j < 5; ++j){
+  //Se inicializa/limpia la cache
+  for (int i = 0; i < 64; i++){
+    for (int j = 0; j < 8; j++){
       cache[i][j]=0;
     }
   }
   //Se ordena dependiendo del tipo
   unsigned char temp;
-  for (int i=0;i<=4096-2;i++){
-    for (int j=i+1;j<=4096-1;j++){
+  for (int i=0;i<=n-2;i++){
+    for (int j=i+1;j<=n-1;j++){
       if (leer(i,tipo)>leer(j,tipo)){
         temp=leer(i,tipo);
         escribir(i, tipo,leer(j,tipo));
@@ -246,10 +247,10 @@ void Ordenar(int tipo){
       }
     }
   }
-/* Imprime la matriz
-for (int i = 0; i < 4096; ++i){
-  cout<<int(ram[i])<<endl;
-}*/
+ // Imprime la matriz
+// for (int i = 0; i < 4096; i++){
+//   cout<<int(ram[i])<<endl;
+// }
   cout<<"tiempo: "<<tiempo<<" μs"<<endl;
   tiempo=0;
 }
